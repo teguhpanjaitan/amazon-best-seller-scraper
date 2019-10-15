@@ -27,6 +27,8 @@ class Scraper
 
         $productUrls = $this->getProductUrls();
         $this->updateData($productUrls);
+
+        echo "Done\r\n";
     }
 
     private function getProductUrls()
