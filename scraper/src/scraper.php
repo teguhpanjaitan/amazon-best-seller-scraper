@@ -3,6 +3,9 @@
 namespace Scraper;
 
 use Scraper\Model\AmazonStorePage;
+use Scraper\Model\AmazonProductPage;
+use Scraper\Model\Product;
+use Scraper\Model\ProductLog;
 
 class Scraper
 {
@@ -10,25 +13,24 @@ class Scraper
 
     public function execute()
     {
-        global $debug;
-        $debug = false;
         if (isset($_SERVER['argv'][1])) {
             if ($_SERVER['argv'][1] == "debug") {
-                $debug = true;
+                define('DEBUG', true);
             }
+            else{
+                define('DEBUG', false);
+            }
+        }
+        else{
+            define('DEBUG', false);
         }
 
         $productUrls = $this->getProductUrls();
-        $productDatas = $this->getProductPageDatas($productUrls);
-
-        foreach ($productDatas as $val) {
-            echo $val;
-        }
+        $this->updateData($productUrls);
     }
 
     private function getProductUrls()
     {
-        global $debug;
         $productUrls = [];
         $nextPage = $this->shopUrl;
         $storePage = new AmazonStorePage();
@@ -39,7 +41,7 @@ class Scraper
             $productUrls = array_merge($productUrls, $storePage->getProductUrls());
             $nextPage = $storePage->getNextPageLink();
 
-            if ($debug) {
+            if (DEBUG) {
                 var_dump($productUrls);
                 echo "\r\n";
                 echo $nextPage . "\r\n";
@@ -50,11 +52,26 @@ class Scraper
         return $productUrls;
     }
 
-    private function getProductPageDatas(array $urls = [])
+    private function updateData(array $urls = [])
     {
+        $productPage = new AmazonProductPage();
+        $product = new Product();
+        $productLog = new ProductLog();
 
         foreach($urls as $url){
+            $productPage->loadPage($url);
+            
+            $product->load($productPage);
+            $productLog->load($productPage);
 
+            $product->update();
+            $productLog->update();
+
+            if (DEBUG) {
+                var_dump($url);
+                echo "\r\n";
+                break;
+            }
         }
     }
 }

@@ -10,7 +10,8 @@ class AmazonStorePage
     private $dom;
     private $domain = "https://www.amazon.com";
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->dom = new HtmlDomParser();
     }
 
