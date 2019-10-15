@@ -1,0 +1,48 @@
+<?php
+$this->headLink()->appendStylesheet('https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css');
+$this->headScript()->appendFile("https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js", 'text/javascript');
+?>
+<br>
+<div class="jumbotron">
+    <h2>Scraper <span class="zf-green">Data</span></h2>
+
+    <table id="products" class="display">
+        <thead>
+            <tr>
+                <th>BSR</th>
+                <th>Trend</th>
+                <th>ASIN</th>
+                <th>Product Title</th>
+                <th>Price</th>
+                <th>Ratings</th>
+                <th>Average Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<?php
+$productsTable = $this->url('application', ['action' => 'productsTable']);
+
+$this->inlineScript()->captureStart();
+echo <<<JS
+var productsTable = "$productsTable";
+
+$(document).ready(function () {
+    $('#products').DataTable({
+        processing: false,
+        serverSide: true,
+        searching: true,
+        bInfo: false,
+        "lengthChange": false,
+        "order": [[0, "desc"]],
+        ajax: {
+            url: productsTable,
+            type: "GET"
+        }
+    });
+});
+JS;
+$this->inlineScript()->captureEnd();
