@@ -44,10 +44,10 @@ class Scraper
             $nextPage = $storePage->getNextPageLink();
 
             if (DEBUG) {
+                echo "Append new prodct URLS\r\n";
                 var_dump($productUrls);
                 echo "\r\n";
                 echo $nextPage . "\r\n";
-                break;
             }
         } while (!empty($nextPage));
 
@@ -66,13 +66,13 @@ class Scraper
             $product->load($productPage);
             $productLog->load($productPage);
 
-            $product->update();
-            $productLog->update();
+            $productId = $product->save();
+            $productLog->save($productId);
 
             if (DEBUG) {
+                echo "Finish proceed URL\r\n";
                 var_dump($url);
                 echo "\r\n";
-                break;
             }
         }
     }

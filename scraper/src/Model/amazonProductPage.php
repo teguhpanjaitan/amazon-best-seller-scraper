@@ -8,6 +8,7 @@ class AmazonProductPage
 {
     private $elements;
     private $dom;
+    private $url;
 
     public function __construct()
     {
@@ -16,7 +17,13 @@ class AmazonProductPage
 
     public function loadPage($url)
     {
+        $this->url = $url;
         $this->elements = $this->dom->file_get_html($url, false, null, 0);
+    }
+
+    public function getUrl()
+    {
+        return $this->url;
     }
 
     public function getTitle()
