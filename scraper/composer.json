@@ -1,6 +1,7 @@
 {
     "require": {
-        "sunra/php-simple-html-dom-parser": "^1.5"
+        "sunra/php-simple-html-dom-parser": "^1.5",
+        "zendframework/zend-config": "^3.3"
     },
     "autoload": {
         "psr-4": {

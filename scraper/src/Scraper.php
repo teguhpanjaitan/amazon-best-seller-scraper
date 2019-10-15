@@ -11,6 +11,12 @@ class Scraper
 {
     private $shopUrl = "https://www.amazon.com/s?me=A1MHVA9P45JS92";
 
+    public function __construct(){
+        global $config;
+        $tempConfig = new Scraper\Config();
+        $config = new Zend\Config\Config($tempConfig->get());
+    }
+
     public function execute()
     {
         if (isset($_SERVER['argv'][1])) {
