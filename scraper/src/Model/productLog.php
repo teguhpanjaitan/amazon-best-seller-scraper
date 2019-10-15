@@ -27,7 +27,7 @@ class ProductLog
         }
 
         if (DEBUG) {
-            echo "Save product\r\n";
+            echo "Save product log\r\n";
             var_dump($productId, $price, $bestSellerRank, $ratings, $avgRating, $date);
             echo "\r\n";
         }

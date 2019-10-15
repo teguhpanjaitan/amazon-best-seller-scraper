@@ -44,12 +44,15 @@ class Scraper
             $nextPage = $storePage->getNextPageLink();
 
             if (DEBUG) {
-                echo "Append new prodct URLS\r\n";
-                var_dump($productUrls);
-                echo "\r\n";
                 echo $nextPage . "\r\n";
             }
         } while (!empty($nextPage));
+
+        if (DEBUG) {
+            echo "All URL\r\n";
+            var_dump($productUrls);
+            echo "\r\n";
+        }
 
         return $productUrls;
     }
