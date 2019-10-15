@@ -39,8 +39,8 @@ class AmazonProductPage
             return null;
         } else {
             $temp = trim(preg_replace('/\s+/', ' ', $foundElements->plaintext));
-            $temp = str_replace("$","",$temp);
-            return $temp;
+            $temp = str_replace("$", "", $temp);
+            return doubleval($temp);
         }
     }
 
@@ -64,7 +64,17 @@ class AmazonProductPage
             return null;
         } else {
             $temp = trim(preg_replace('/\s+/', ' ', $foundElements->plaintext));
-            return $temp;
+            return $this->getRatingsValue($temp);
+        }
+    }
+
+    private function getRatingsValue($word = "")
+    {
+        $temp = explode(" ", $word);
+        if (isset($temp[0])) {
+            return intval($temp[0]);
+        } else {
+            return 0;
         }
     }
 
@@ -76,7 +86,17 @@ class AmazonProductPage
             return null;
         } else {
             $temp = trim(preg_replace('/\s+/', ' ', $foundElements->title));
-            return $temp;
+            return $this->getAverageRatingValue($temp);
+        }
+    }
+
+    private function getAverageRatingValue($word = "")
+    {
+        $temp = explode(" ", $word);
+        if (isset($temp[0])) {
+            return floatval($temp[0]);
+        } else {
+            return floatval(0);
         }
     }
 
@@ -93,8 +113,18 @@ class AmazonProductPage
                 return null;
             } else {
                 $temp = trim(preg_replace('/\s+/', ' ', $foundElements->plaintext));
-                return $temp;
+                return $this->getBestSellerRankValue($temp);
             }
+        }
+    }
+
+    private function getBestSellerRankValue($word = "")
+    {
+        $temp = explode(" ", str_replace("#", "", $word));
+        if (isset($temp[0])) {
+            return intval($temp[0]);
+        } else {
+            return 0;
         }
     }
 }
