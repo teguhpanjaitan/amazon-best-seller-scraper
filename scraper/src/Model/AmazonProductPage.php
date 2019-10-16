@@ -33,7 +33,7 @@ class AmazonProductPage
         if (empty($foundElements)) {
             return null;
         } else {
-            $temp = trim(preg_replace('/\s+/', ' ', $foundElements->plaintext));
+            $temp = $this->removeSpaceFromWord($foundElements->plaintext);
             return $temp;
         }
     }
@@ -43,9 +43,17 @@ class AmazonProductPage
         $foundElements = $this->elements->find('#priceblock_ourprice', 0);
 
         if (empty($foundElements)) {
-            return null;
+            $foundElements = $this->elements->find('#priceblock_saleprice', 0);
+
+            if (empty($foundElements)) {
+                return null;
+            } else {
+                $temp = $this->removeSpaceFromWord($foundElements->plaintext);
+                $temp = str_replace("$", "", $temp);
+                return doubleval($temp);
+            }
         } else {
-            $temp = trim(preg_replace('/\s+/', ' ', $foundElements->plaintext));
+            $temp = $this->removeSpaceFromWord($foundElements->plaintext);
             $temp = str_replace("$", "", $temp);
             return doubleval($temp);
         }
@@ -70,9 +78,14 @@ class AmazonProductPage
         if (empty($foundElements)) {
             return null;
         } else {
-            $temp = trim(preg_replace('/\s+/', ' ', $foundElements->plaintext));
+            $temp = $this->removeSpaceFromWord($foundElements->plaintext);
             return $this->getRatingsValue($temp);
         }
+    }
+
+    private function removeSpaceFromWord($word)
+    {
+        return trim(preg_replace('/\s+/', ' ', $word));
     }
 
     private function getRatingsValue($word = "")
