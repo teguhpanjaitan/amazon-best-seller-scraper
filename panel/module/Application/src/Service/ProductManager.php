@@ -2,15 +2,15 @@
 
 namespace Application\Service;
 
-use Application\Entity\Product as ProductEntity;
-
 class ProductManager
 {
     private $productMapper;
+    private $productLogMapper;
 
-    public function __construct($productMapper)
+    public function __construct($productMapper,$productLogMapper)
     {
         $this->productMapper = $productMapper;
+        $this->productLogMapper = $productLogMapper;
     }
 
     public function getTable($controllerParams)
@@ -28,9 +28,9 @@ class ProductManager
         foreach ($data["data"] as $value) {
             $t = array();
             $t[] = $value->getBestSellerRank();
-            $t[] = $value->getBestSellerRank();
+            $t[] = $this->get30DaysHistory($value->getAsin());
             $t[] = $value->getAsin();
-            $t[] = $value->getTitle();
+            $t[] = $this->getTitle($value->getTitle(),$value->getLink());
             $t[] = $value->getPrice();
             $t[] = $value->getRatings();
             $t[] = $value->getAvgRating();
@@ -38,6 +38,26 @@ class ProductManager
         }
 
         return array("draw" => $data['draw'], "recordsTotal" => $data['total'], "recordsFiltered" => $data['total'], "data" => $temp);
+    }
+
+    private function get30DaysHistory($asin){
+        $results = $this->productLogMapper->getProductHistoryByASIN($asin);
+
+        $return = [];
+        foreach($results as $result){
+            $temp = [];
+            $temp['price'] = $result->getPrice();
+            $temp['best_seller_rank'] = $result->getBestSellerRank();
+            $temp['ratings'] = $result->getRatings();
+            $temp['avg_rating'] = $result->getAvgRating();
+            $return[] = $temp;
+        }
+
+        return json_encode($return);
+    }
+
+    private function getTitle($title,$link){
+        return "<a href='$link' target='_blank'>$title</a>";
     }
 
     private function getParams($params)
