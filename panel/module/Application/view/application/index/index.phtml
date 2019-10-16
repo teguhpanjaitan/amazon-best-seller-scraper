@@ -1,6 +1,7 @@
 <?php
 $this->headLink()->appendStylesheet('https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css');
-$this->headScript()->appendFile("https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js", 'text/javascript');
+$this->headScript()->appendFile("https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js", 'text/javascript')
+    ->appendFile("https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js", 'text/javascript');
 ?>
 <br>
 <div class="jumbotron">
@@ -38,11 +39,77 @@ $(document).ready(function () {
         bInfo: false,
         "lengthChange": false,
         "order": [[0, "desc"]],
+        "columnDefs": [{ "orderable": false, "targets": 1 }],
         ajax: {
             url: productsTable,
             type: "GET"
+        },
+        "drawCallback": function () {
+            handleChart();
         }
     });
 });
+
+function handleChart(){
+    $("#products tbody tr td:nth-child(2)").each(function () {
+        var data = $(this).children(".data").html();
+        var element = $(this).children(".chart");
+        data = JSON.parse(data);
+        showChart(element,data);
+    });
+}
+
+function showChart(element,dataset){
+    if(dataset.length <= 1){
+        return;
+    }
+
+    var labels = [];
+    var count = 0;
+    dataset.forEach(function(item){
+        labels.push(count);
+        count++;
+    });
+
+    new Chart(element, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '# of Votes',
+                data: dataset,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            elements: {
+                point: {
+                    radius: 0
+                }
+            },
+            legend: {
+                display: false,
+            },
+            scales: {
+                yAxes: [{
+                    gridLines: {
+                        drawBorder: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                }],
+                xAxes: [{
+                    gridLines: {
+                        display: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                }],
+            },
+        }
+    });
+}
 JS;
 $this->inlineScript()->captureEnd();

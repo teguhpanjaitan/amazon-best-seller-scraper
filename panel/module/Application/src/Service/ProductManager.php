@@ -45,15 +45,11 @@ class ProductManager
 
         $return = [];
         foreach($results as $result){
-            $temp = [];
-            $temp['price'] = $result->getPrice();
-            $temp['best_seller_rank'] = $result->getBestSellerRank();
-            $temp['ratings'] = $result->getRatings();
-            $temp['avg_rating'] = $result->getAvgRating();
-            $return[] = $temp;
+            $return[] = $result->getBestSellerRank();
         }
 
-        return json_encode($return);
+        return "<span class='data' style='display:none'>" . json_encode($return) . "</span>" .
+                "<canvas  width='100px' class='chart' style='max-height:50px'>Chart</canvas>";
     }
 
     private function getTitle($title,$link){
