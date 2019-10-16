@@ -28,12 +28,14 @@ class ProductLog extends AbstractMapper implements MapperInterface
           $queryBuilder->select('pl')
                ->from(ProductLogEntity::class, 'pl')
                ->where("pl.createdOn BETWEEN :start AND :end")
-                    ->setParameter('start', $start)
-                    ->setParameter('end', $end);
-          
+               ->groupby("pl.createdOn")
+               ->orderBy("pl.createdOn", "ASC")
+               ->setParameter('start', $start)
+               ->setParameter('end', $end);
+
           $data = $queryBuilder->getQuery()->getResult();
           $this->getEntityManager()->getConnection()->close();
-          
+
           return $data;
      }
 }
