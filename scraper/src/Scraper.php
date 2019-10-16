@@ -13,8 +13,8 @@ class Scraper
 
     public function __construct(){
         global $config;
-        $tempConfig = new Scraper\Config();
-        $config = new Zend\Config\Config($tempConfig->get());
+        $tempConfig = new \Scraper\Config();
+        $config = new \Zend\Config\Config($tempConfig->get());
     }
 
     public function execute()
@@ -51,6 +51,7 @@ class Scraper
 
             if (DEBUG) {
                 echo $nextPage . "\r\n";
+                break;
             }
         } while (!empty($nextPage));
 
@@ -82,6 +83,7 @@ class Scraper
                 echo "Finish proceed URL\r\n";
                 var_dump($url);
                 echo "\r\n";
+                break;
             }
         }
     }

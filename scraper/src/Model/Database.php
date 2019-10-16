@@ -9,6 +9,7 @@ class Database
     public function __construct()
     {
         global $config;
+        
         $host = $config->database->get('host', 'localhost');
         $dbname = $config->database->get('dbname', 'scraper');
         $dsn = "mysql:host=$host;dbname=$dbname";
