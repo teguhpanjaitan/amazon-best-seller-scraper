@@ -26,8 +26,8 @@ class Product extends AbstractMapper implements MapperInterface
           $dir = $params['dir'];
           $search = $params['search']['value'];
 
-          if ($col == "0") $col = "p.sold";
-          else if ($col == "1") $col = "p.sold";
+          if ($col == "0") $col = "p.bestSellerRank";
+          else if ($col == "1") $col = "p.bestSellerRank";
           else if ($col == "2") $col = "p.asin";
           else if ($col == "3") $col = "p.title";
           else if ($col == "4") $col = "p.price";

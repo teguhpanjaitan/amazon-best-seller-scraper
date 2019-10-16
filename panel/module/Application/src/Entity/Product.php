@@ -15,18 +15,11 @@ class Product
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="sold", type="integer", nullable=true)
-     */
-    private $sold;
 
     /**
      * @var string|null
@@ -57,11 +50,18 @@ class Product
     private $price;
 
     /**
-     * @var float|null
+     * @var int|null
      *
-     * @ORM\Column(name="rating", type="float", precision=10, scale=0, nullable=true)
+     * @ORM\Column(name="best_seller_rank", type="integer", nullable=true)
      */
-    private $rating;
+    private $bestSellerRank;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="ratings", type="integer", nullable=true)
+     */
+    private $ratings;
 
     /**
      * @var float|null
@@ -71,11 +71,25 @@ class Product
     private $avgRating;
 
     /**
-     * @var string|null
+     * @var int|null
      *
-     * @ORM\Column(name="category", type="text", length=65535, nullable=true)
+     * @ORM\Column(name="status", type="integer", nullable=true, options={"default"="1"})
      */
-    private $category;
+    private $status = '1';
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="created_on", type="datetime", nullable=true)
+     */
+    private $createdOn;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="updated_on", type="datetime", nullable=true)
+     */
+    private $updatedOn;
 
 
 
@@ -90,35 +104,11 @@ class Product
     }
 
     /**
-     * Set sold.
-     *
-     * @param int|null $sold
-     *
-     * @return Products
-     */
-    public function setSold($sold = null)
-    {
-        $this->sold = $sold;
-
-        return $this;
-    }
-
-    /**
-     * Get sold.
-     *
-     * @return int|null
-     */
-    public function getSold()
-    {
-        return $this->sold;
-    }
-
-    /**
      * Set link.
      *
      * @param string|null $link
      *
-     * @return Products
+     * @return Product
      */
     public function setLink($link = null)
     {
@@ -142,7 +132,7 @@ class Product
      *
      * @param string|null $asin
      *
-     * @return Products
+     * @return Product
      */
     public function setAsin($asin = null)
     {
@@ -166,7 +156,7 @@ class Product
      *
      * @param string|null $title
      *
-     * @return Products
+     * @return Product
      */
     public function setTitle($title = null)
     {
@@ -190,7 +180,7 @@ class Product
      *
      * @param float|null $price
      *
-     * @return Products
+     * @return Product
      */
     public function setPrice($price = null)
     {
@@ -210,27 +200,51 @@ class Product
     }
 
     /**
-     * Set rating.
+     * Set bestSellerRank.
      *
-     * @param float|null $rating
+     * @param int|null $bestSellerRank
      *
-     * @return Products
+     * @return Product
      */
-    public function setRating($rating = null)
+    public function setBestSellerRank($bestSellerRank = null)
     {
-        $this->rating = $rating;
+        $this->bestSellerRank = $bestSellerRank;
 
         return $this;
     }
 
     /**
-     * Get rating.
+     * Get bestSellerRank.
      *
-     * @return float|null
+     * @return int|null
      */
-    public function getRating()
+    public function getBestSellerRank()
     {
-        return $this->rating;
+        return $this->bestSellerRank;
+    }
+
+    /**
+     * Set ratings.
+     *
+     * @param int|null $ratings
+     *
+     * @return Product
+     */
+    public function setRatings($ratings = null)
+    {
+        $this->ratings = $ratings;
+
+        return $this;
+    }
+
+    /**
+     * Get ratings.
+     *
+     * @return int|null
+     */
+    public function getRatings()
+    {
+        return $this->ratings;
     }
 
     /**
@@ -238,7 +252,7 @@ class Product
      *
      * @param float|null $avgRating
      *
-     * @return Products
+     * @return Product
      */
     public function setAvgRating($avgRating = null)
     {
@@ -258,26 +272,74 @@ class Product
     }
 
     /**
-     * Set category.
+     * Set status.
      *
-     * @param string|null $category
+     * @param int|null $status
      *
-     * @return Products
+     * @return Product
      */
-    public function setCategory($category = null)
+    public function setStatus($status = null)
     {
-        $this->category = $category;
+        $this->status = $status;
 
         return $this;
     }
 
     /**
-     * Get category.
+     * Get status.
      *
-     * @return string|null
+     * @return int|null
      */
-    public function getCategory()
+    public function getStatus()
     {
-        return $this->category;
+        return $this->status;
+    }
+
+    /**
+     * Set createdOn.
+     *
+     * @param \DateTime|null $createdOn
+     *
+     * @return Product
+     */
+    public function setCreatedOn($createdOn = null)
+    {
+        $this->createdOn = $createdOn;
+
+        return $this;
+    }
+
+    /**
+     * Get createdOn.
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedOn()
+    {
+        return $this->createdOn;
+    }
+
+    /**
+     * Set updatedOn.
+     *
+     * @param \DateTime|null $updatedOn
+     *
+     * @return Product
+     */
+    public function setUpdatedOn($updatedOn = null)
+    {
+        $this->updatedOn = $updatedOn;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedOn.
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedOn()
+    {
+        return $this->updatedOn;
     }
 }

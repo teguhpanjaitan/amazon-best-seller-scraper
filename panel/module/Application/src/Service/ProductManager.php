@@ -27,12 +27,12 @@ class ProductManager
         $temp = array();
         foreach ($data["data"] as $value) {
             $t = array();
-            $t[] = $value->getSold();
-            $t[] = $value->getSold();
+            $t[] = $value->getBestSellerRank();
+            $t[] = $value->getBestSellerRank();
             $t[] = $value->getAsin();
             $t[] = $value->getTitle();
             $t[] = $value->getPrice();
-            $t[] = $value->getRating();
+            $t[] = $value->getRatings();
             $t[] = $value->getAvgRating();
             $temp[] = $t;
         }
