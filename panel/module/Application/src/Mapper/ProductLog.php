@@ -30,8 +30,10 @@ class ProductLog extends AbstractMapper implements MapperInterface
                ->leftJoin("pl.product","p")
                ->where("pl.createdOn BETWEEN :start AND :end")
                ->andWhere("p.asin = :asin")
+               ->andWhere("pl.bestSellerRank <> :bsr")
                ->orderBy("pl.createdOn", "ASC")
                ->setParameter('asin', $asin)
+               ->setParameter('bsr', "")
                ->setParameter('start', $start)
                ->setParameter('end', $end);
 

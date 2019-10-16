@@ -38,6 +38,7 @@ class Product extends AbstractMapper implements MapperInterface
 
           $queryBuilder->select('p')
                ->from(ProductEntity::class, 'p')
+               ->where("p.bestSellerRank <> :bsr")
                ->setMaxResults($length)
                ->setFirstResult($start);
 
@@ -50,6 +51,8 @@ class Product extends AbstractMapper implements MapperInterface
                $queryBuilder->orderBy($col, $dir);
           }
 
+          $queryBuilder->setParameter('bsr', "");
+
           $data = $queryBuilder->getQuery()->getResult();
           $this->getEntityManager()->getConnection()->close();
 
@@ -57,13 +60,16 @@ class Product extends AbstractMapper implements MapperInterface
           $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
           $queryBuilder->select('count(p.id) as count')
-               ->from(ProductEntity::class, 'p');
+               ->from(ProductEntity::class, 'p')
+               ->where("p.bestSellerRank <> :bsr");
 
           if (!empty($search)) {
                $queryBuilder->andWhere("p.title LIKE :title")
                     ->setParameter('title', $search);
           }
 
+          $queryBuilder->setParameter('bsr', "");
+          
           $total = $queryBuilder->getQuery()->getSingleResult();
           $this->getEntityManager()->getConnection()->close();
 
