@@ -19,6 +19,13 @@ class AmazonProductPage
     {
         $this->url = $url;
         $this->elements = $this->dom->file_get_html($url, false, null, 0);
+
+        $title = $this->elements->find('title', 0)->plaintext;
+        if ($title == "Sorry! Something went wrong!") {
+            $proxy = new \Scraper\Helper\Proxy();
+            $stream = $proxy->rotate();
+            $this->elements = $this->dom->file_get_html($url, false, $stream, 0);
+        }
     }
 
     public function getUrl()

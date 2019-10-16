@@ -9,8 +9,6 @@ use Scraper\Model\ProductLog;
 
 class Scraper
 {
-    private $shopUrl = "https://www.amazon.com/s?me=A1MHVA9P45JS92";
-
     public function __construct(){
         global $config;
         $tempConfig = new \Scraper\Config();
@@ -39,8 +37,9 @@ class Scraper
 
     private function getProductUrls()
     {
+        global $config;
         $productUrls = [];
-        $nextPage = $this->shopUrl;
+        $nextPage = $config->storeurl;
         $storePage = new AmazonStorePage();
 
         do {
@@ -51,7 +50,7 @@ class Scraper
 
             if (DEBUG) {
                 echo $nextPage . "\r\n";
-                break;
+                // break;
             }
         } while (!empty($nextPage));
 
@@ -83,7 +82,7 @@ class Scraper
                 echo "Finish proceed URL\r\n";
                 var_dump($url);
                 echo "\r\n";
-                break;
+                // break;
             }
         }
     }
