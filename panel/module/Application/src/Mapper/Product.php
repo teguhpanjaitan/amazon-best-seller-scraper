@@ -20,7 +20,7 @@ class Product extends AbstractMapper implements MapperInterface
 
      public function getTable(array $params = [])
      {
-          $length = "10";
+          $length = $params['length'];
           $start = $params['start'];
           $col = $params['col'];
           $dir = $params['dir'];
