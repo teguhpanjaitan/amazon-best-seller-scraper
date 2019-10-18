@@ -63,7 +63,7 @@ class Product extends AbstractMapper implements MapperInterface
 
           if (!empty($search)) {
                $queryBuilder->andWhere("p.title LIKE :title")
-                    ->setParameter('title', $search);
+                    ->setParameter('title', "%$search%");
           }
 
           $total = $queryBuilder->getQuery()->getSingleResult();
