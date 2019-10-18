@@ -31,7 +31,7 @@ class Product extends AbstractMapper implements MapperInterface
           else if ($col == "2") $col = "p.asin";
           else if ($col == "3") $col = "p.title";
           else if ($col == "4") $col = "p.price";
-          else if ($col == "5") $col = "p.rating";
+          else if ($col == "5") $col = "p.ratings";
           else if ($col == "6") $col = "p.avgRating";
 
           $queryBuilder = $this->getEntityManager()->createQueryBuilder();
