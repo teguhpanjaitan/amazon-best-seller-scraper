@@ -33,11 +33,11 @@ var productsTable = "$productsTable";
 
 $(document).ready(function () {
     $('#products').DataTable({
-        processing: false,
+        processing: true,
         serverSide: true,
         searching: true,
         bInfo: false,
-        "pageLength": 50,
+        "lengthChange": false,
         "order": [[0, "asc"]],
         "columnDefs": [{ "orderable": false, "targets": 1 }],
         ajax: {
