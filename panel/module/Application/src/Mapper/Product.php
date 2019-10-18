@@ -38,7 +38,7 @@ class Product extends AbstractMapper implements MapperInterface
 
           $queryBuilder->select('p')
                ->from(ProductEntity::class, 'p')
-               ->where("p.bestSellerRank <> :bsr")
+               ->addSelect('CASE WHEN p.bestSellerRank IS NULL THEN 1 ELSE 0 END AS HIDDEN myValueIsNull')
                ->setMaxResults($length)
                ->setFirstResult($start);
 
@@ -48,10 +48,9 @@ class Product extends AbstractMapper implements MapperInterface
           }
 
           if (!empty($col)) {
-               $queryBuilder->orderBy($col, $dir);
+               $queryBuilder->addOrderBy("myValueIsNull", $dir)
+                    ->addOrderBy($col, $dir);
           }
-
-          $queryBuilder->setParameter('bsr', "");
 
           $data = $queryBuilder->getQuery()->getResult();
           $this->getEntityManager()->getConnection()->close();
@@ -60,16 +59,13 @@ class Product extends AbstractMapper implements MapperInterface
           $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
           $queryBuilder->select('count(p.id) as count')
-               ->from(ProductEntity::class, 'p')
-               ->where("p.bestSellerRank <> :bsr");
+               ->from(ProductEntity::class, 'p');
 
           if (!empty($search)) {
                $queryBuilder->andWhere("p.title LIKE :title")
                     ->setParameter('title', $search);
           }
 
-          $queryBuilder->setParameter('bsr', "");
-          
           $total = $queryBuilder->getQuery()->getSingleResult();
           $this->getEntityManager()->getConnection()->close();
 
