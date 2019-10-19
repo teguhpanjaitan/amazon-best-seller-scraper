@@ -18,7 +18,7 @@ class Proxy
     {
         global $config;
 
-        $result = json_decode(file_get_contents($config->proxyapi));
+        $result = json_decode(file_get_contents($config->proxy->get("API", "")));
         $context = [
             'http' => [
                 'proxy' => 'tcp://' . $result->proxy,
