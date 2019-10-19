@@ -53,7 +53,7 @@ class AmazonProductPage
             $foundElements = $this->elements->find('#priceblock_saleprice', 0);
 
             if (empty($foundElements)) {
-                return null;
+                return 0;
             } else {
                 $temp = $this->removeSpaceFromWord($foundElements->plaintext);
                 $temp = str_replace("$", "", $temp);
@@ -83,7 +83,7 @@ class AmazonProductPage
         $foundElements = $this->elements->find('#acrCustomerReviewText', 0);
 
         if (empty($foundElements)) {
-            return null;
+            return 0;
         } else {
             $temp = $this->removeSpaceFromWord($foundElements->plaintext);
             return $this->getRatingsValue($temp);
@@ -110,7 +110,7 @@ class AmazonProductPage
         $foundElements = $this->elements->find('#acrPopover', 0);
 
         if (empty($foundElements)) {
-            return null;
+            return 0;
         } else {
             $temp = trim(preg_replace('/\s+/', ' ', $foundElements->title));
             return $this->getAverageRatingValue($temp);
