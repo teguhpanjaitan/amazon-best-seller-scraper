@@ -28,7 +28,7 @@ class Proxy
         ];
         $stream = stream_context_create($context);
 
-        if (DEBUG) {
+        if (!SILENT) {
             echo "Rotate proxy and use $result->proxy\r\n";
         }
 

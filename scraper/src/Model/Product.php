@@ -50,7 +50,7 @@ class Product
 
             $productId = $db->getMysqlPdo()->lastInsertId();
 
-            if (DEBUG) {
+            if (!SILENT) {
                 echo "New product #$productId\r\n";
             }
         } else {
@@ -68,12 +68,12 @@ class Product
 
             $productId = $row['id'];
 
-            if (DEBUG) {
+            if (!SILENT) {
                 echo "Update product #$productId\r\n";
             }
         }
 
-        if (DEBUG) {
+        if (!SILENT) {
             var_dump($link, $asin, $title, $price, $ratings, $avgRating, $bestSellerRank, $date);
             echo "\r\n";
         }

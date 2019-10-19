@@ -18,15 +18,15 @@ class Scraper
     public function execute()
     {
         if (isset($_SERVER['argv'][1])) {
-            if ($_SERVER['argv'][1] == "debug") {
-                define('DEBUG', true);
+            if ($_SERVER['argv'][1] == "SILENT") {
+                define('SILENT', true);
             }
             else{
-                define('DEBUG', false);
+                define('SILENT', false);
             }
         }
         else{
-            define('DEBUG', false);
+            define('SILENT', false);
         }
 
         $productUrls = $this->getProductUrls();
@@ -48,13 +48,13 @@ class Scraper
             $productUrls = array_merge($productUrls, $storePage->getProductUrls());
             $nextPage = $storePage->getNextPageLink();
 
-            if (DEBUG) {
+            if (!SILENT) {
                 echo $nextPage . "\r\n";
                 // break;
             }
         } while (!empty($nextPage));
 
-        if (DEBUG) {
+        if (!SILENT) {
             echo "All URL\r\n";
             var_dump($productUrls);
             echo "\r\n";
@@ -78,7 +78,7 @@ class Scraper
             $productId = $product->save();
             $productLog->save($productId);
 
-            if (DEBUG) {
+            if (!SILENT) {
                 echo "Finish proceed URL\r\n";
                 var_dump($url);
                 echo "\r\n";
