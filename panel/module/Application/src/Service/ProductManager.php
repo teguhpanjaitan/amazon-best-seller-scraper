@@ -31,7 +31,7 @@ class ProductManager
             $t[] = $this->get30DaysHistory($value->getAsin());
             $t[] = $value->getAsin();
             $t[] = $this->getTitle($value->getTitle(),$value->getLink());
-            $t[] = $value->getPrice();
+            $t[] = number_format((float)$value->getPrice(), 2, '.', '');
             $t[] = $value->getRatings();
             $t[] = $value->getAvgRating();
             $temp[] = $t;
