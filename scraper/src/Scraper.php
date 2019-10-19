@@ -17,8 +17,10 @@ class Scraper
 
     public function execute()
     {
-        if (isset($_SERVER['argv'][1])) {
-            if ($_SERVER['argv'][1] == "SILENT") {
+        $mode = getopt("m:");
+
+        if (count($mode) != 0) {
+            if (strtolower($mode['m']) == "silent") {
                 define('SILENT', true);
             }
             else{
