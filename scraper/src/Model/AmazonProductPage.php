@@ -22,7 +22,7 @@ class AmazonProductPage
         $this->url = $url;
         $proxy = new \Scraper\Helper\Proxy();
 
-        if($config->proxy->get("force",false) && empty($stream)){
+        if ($config->proxy->get("force", false) && empty($stream)) {
             $stream = $proxy->rotate();
         }
 
