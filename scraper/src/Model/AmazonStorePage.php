@@ -17,11 +17,18 @@ class AmazonStorePage
 
     public function loadPage($url)
     {
-        $this->elements = $this->dom->file_get_html($url, false, null, 0);
+        global $config;
+        $stream = null;
+        $proxy = new \Scraper\Helper\Proxy();
+
+        if($config->proxy->get("force",false) && empty($stream)){
+            $stream = $proxy->rotate();
+        }
+
+        $this->elements = $this->dom->file_get_html($url, false, $stream, 0);
 
         $title = $this->elements->find('title', 0)->plaintext;
         if (strpos(strtolower($title), 'sorry') !== false) {
-            $proxy = new \Scraper\Helper\Proxy();
             $stream = $proxy->rotate();
             $this->elements = $this->dom->file_get_html($url, false, $stream, 0);
         }
