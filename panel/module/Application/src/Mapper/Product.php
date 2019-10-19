@@ -38,7 +38,6 @@ class Product extends AbstractMapper implements MapperInterface
 
           $queryBuilder->select('p')
                ->from(ProductEntity::class, 'p')
-               ->addSelect('CASE WHEN p.bestSellerRank IS NULL THEN 1 ELSE 0 END AS HIDDEN bsrIsNull')
                ->setMaxResults($length)
                ->setFirstResult($start);
 
@@ -48,8 +47,13 @@ class Product extends AbstractMapper implements MapperInterface
           }
 
           if (!empty($col)) {
-               $queryBuilder->addOrderBy("bsrIsNull", $dir)
-                    ->addOrderBy($col, $dir);
+               if ($col == "p.bestSellerRank") {
+                    $queryBuilder->addSelect('CASE WHEN p.bestSellerRank IS NULL THEN 1 ELSE 0 END AS HIDDEN bsrIsNull')
+                         ->addOrderBy("bsrIsNull", $dir)
+                         ->addOrderBy($col, $dir);
+               } else {
+                    $queryBuilder->addOrderBy($col, $dir);
+               }
           }
 
           $data = $queryBuilder->getQuery()->getResult();
