@@ -17,10 +17,10 @@ class AmazonProductPage
 
     public function loadPage($url)
     {
-        global $config,$stream;
+        global $config, $stream;
         $this->url = $url;
         $proxy = new \Scraper\Helper\Proxy();
-        
+
         if ($config->proxy->get("force", false) && empty($stream)) {
             $stream = $proxy->rotate();
         }
@@ -118,7 +118,7 @@ class AmazonProductPage
         if (empty($foundElements)) {
             return 0;
         } else {
-            $temp = trim(preg_replace('/\s+/', ' ', $foundElements->title));
+            $temp = $this->removeSpaceFromWord($foundElements->title);
             return $this->getAverageRatingValue($temp);
         }
     }
@@ -135,19 +135,32 @@ class AmazonProductPage
 
     public function getBestSellerRank()
     {
-        $foundElements = $this->elements->find('#productDetails_detailBullets_sections1 tbody tr td', 7);
+        $foundTrElements = $this->elements->find('#productDetails_detailBullets_sections1 tbody tr');
 
-        if (empty($foundElements)) {
+        if (empty($foundTrElements)) {
             return null;
         } else {
-            $foundElements = $foundElements->find("span span", 0);
+            foreach ($foundTrElements as $key => $element) {
+                $foundElement = $element->find(".prodDetSectionEntry", 0);
 
-            if (empty($foundElements)) {
-                return null;
-            } else {
-                $temp = trim(preg_replace('/\s+/', ' ', $foundElements->plaintext));
-                return $this->getBestSellerRankValue($temp);
+                if (!empty($foundElement)) {
+                    $text = $this->removeSpaceFromWord($foundElement->plaintext);
+
+                    if (strtolower($text) == "best sellers rank") {
+                        $foundTdElements = $this->elements->find("#productDetails_detailBullets_sections1 tbody tr td", $key);
+
+                        if (empty($foundTdElements)) {
+                            return null;
+                        } else {
+                            $foundSpanElements = $foundTdElements->find("span span", 0);
+                            $temp = $this->removeSpaceFromWord($foundSpanElements->plaintext);
+                            return $this->getBestSellerRankValue($temp);
+                        }
+                    }
+                }
             }
+
+            return null;
         }
     }
 
@@ -155,7 +168,8 @@ class AmazonProductPage
     {
         $temp = explode(" ", str_replace("#", "", $word));
         if (isset($temp[0])) {
-            return intval($temp[0]);
+            $temp = str_replace(",", "", $temp[0]);
+            return intval($temp);
         } else {
             return 0;
         }
