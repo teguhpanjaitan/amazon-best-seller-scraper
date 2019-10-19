@@ -17,8 +17,7 @@ class AmazonStorePage
 
     public function loadPage($url)
     {
-        global $config;
-        $stream = null;
+        global $config,$stream;
         $proxy = new \Scraper\Helper\Proxy();
 
         if ($config->proxy->get("force", false) && empty($stream)) {

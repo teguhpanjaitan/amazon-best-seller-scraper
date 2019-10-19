@@ -17,11 +17,10 @@ class AmazonProductPage
 
     public function loadPage($url)
     {
-        global $config;
-        $stream = null;
+        global $config,$stream;
         $this->url = $url;
         $proxy = new \Scraper\Helper\Proxy();
-
+        
         if ($config->proxy->get("force", false) && empty($stream)) {
             $stream = $proxy->rotate();
         }
