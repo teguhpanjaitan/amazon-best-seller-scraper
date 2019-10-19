@@ -7,7 +7,7 @@ class ProductManager
     private $productMapper;
     private $productLogMapper;
 
-    public function __construct($productMapper,$productLogMapper)
+    public function __construct($productMapper, $productLogMapper)
     {
         $this->productMapper = $productMapper;
         $this->productLogMapper = $productLogMapper;
@@ -18,7 +18,7 @@ class ProductManager
         $params = $this->getParams($controllerParams);
         $results = $this->productMapper->getTable($params);
         $results['draw'] = intval($params['draw']) + 1;
-        
+
         return $this->format($results);
     }
 
@@ -27,11 +27,12 @@ class ProductManager
         $temp = array();
         foreach ($data["data"] as $value) {
             $t = array();
-            $t[] = $value->getBestSellerRank();
+            $bsr = $value->getBestSellerRank();
+            $t[] = empty($bsr) ? "-" : $bsr;
             $t[] = $this->get30DaysHistory($value->getAsin());
             $t[] = $value->getAsin();
-            $t[] = $this->getTitle($value->getTitle(),$value->getLink());
-            $t[] = number_format((float)$value->getPrice(), 2, '.', '');
+            $t[] = $this->getTitle($value->getTitle(), $value->getLink());
+            $t[] = number_format((float) $value->getPrice(), 2, '.', '');
             $t[] = $value->getRatings();
             $t[] = $value->getAvgRating();
             $temp[] = $t;
@@ -40,19 +41,21 @@ class ProductManager
         return array("draw" => $data['draw'], "recordsTotal" => $data['total'], "recordsFiltered" => $data['total'], "data" => $temp);
     }
 
-    private function get30DaysHistory($asin){
+    private function get30DaysHistory($asin)
+    {
         $results = $this->productLogMapper->getProductHistoryByASIN($asin);
 
         $return = [];
-        foreach($results as $result){
+        foreach ($results as $result) {
             $return[] = $result->getBestSellerRank();
         }
 
         return "<span class='data' style='display:none'>" . json_encode($return) . "</span>" .
-                "<canvas  width='100px' class='chart' style='max-height:50px'>Chart</canvas>";
+            "<canvas  width='100px' class='chart' style='max-height:50px'>Chart</canvas>";
     }
 
-    private function getTitle($title,$link){
+    private function getTitle($title, $link)
+    {
         return "<a href='$link' target='_blank'>$title</a>";
     }
 
